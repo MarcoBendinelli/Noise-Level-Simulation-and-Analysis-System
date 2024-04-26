@@ -1,0 +1,629 @@
+[
+    {
+        "id": "440798723b09e207",
+        "type": "tab",
+        "label": "Data cleaning and enrichment",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ca83a3a20721c740",
+        "type": "subflow",
+        "name": "Read Points of Interest info",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": -20,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "de81d78156fa7d40"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 840,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "2d12a783902e5338",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "fdf4d2abcdb7f5f4",
+        "type": "subflow",
+        "name": "Write nearest points",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 20,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "fa50741eab5ed690"
+                    },
+                    {
+                        "id": "90a157f371081550"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "56a46e01aa23bcc9",
+        "type": "subflow",
+        "name": "Filter the IoT readings",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "9f39d41ca6b8832c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 780,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "9771e202d0319486",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "08b92f05826711db",
+        "type": "subflow",
+        "name": "Read and Filter simulated noises",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "6a2e5df490415eaa"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 880,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "b3861fd20a4abe37",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "e86c8435a8284898",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "mqtt.neslab.it",
+        "port": "3200",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "de81d78156fa7d40",
+        "type": "file in",
+        "z": "ca83a3a20721c740",
+        "name": "Read Points_of_interest_dataset",
+        "filename": "/mnt/c/Programming_Stuff/Middleware_Technologies/4NodeRed/In-Out_files/Points_of_interest_dataset.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "001262b4e354aa5f"
+            ]
+        ]
+    },
+    {
+        "id": "001262b4e354aa5f",
+        "type": "csv",
+        "z": "ca83a3a20721c740",
+        "name": "From CSV to Obj",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "pointOfInterest,latY,longX",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 430,
+        "y": 80,
+        "wires": [
+            [
+                "2d12a783902e5338"
+            ]
+        ]
+    },
+    {
+        "id": "2d12a783902e5338",
+        "type": "change",
+        "z": "ca83a3a20721c740",
+        "name": "Clean up messages",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "pointsOfInterest",
+                "tot": "str"
+            },
+            {
+                "t": "delete",
+                "p": "qos",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "retain",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "filename",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "columns",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 660,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "90a157f371081550",
+        "type": "subflow:ca83a3a20721c740",
+        "z": "fdf4d2abcdb7f5f4",
+        "name": "",
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "fa50741eab5ed690"
+            ]
+        ]
+    },
+    {
+        "id": "fa50741eab5ed690",
+        "type": "join",
+        "z": "fdf4d2abcdb7f5f4",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 410,
+        "y": 60,
+        "wires": [
+            [
+                "b3cd2aeb98bf0bae"
+            ]
+        ]
+    },
+    {
+        "id": "b3cd2aeb98bf0bae",
+        "type": "function",
+        "z": "fdf4d2abcdb7f5f4",
+        "name": "Find nearest point",
+        "func": "let coordinates = {\n    longX: null,\n    latY: null\n};\n\nlet output = [];\nlet minIndex = 0;\nlet minimumDistance = 0;\n\n// It calculates the distance between\n// the IoT device and the point of interest\nfunction calculateDistances(value, index, array) {\n    \n    // Coordinates of the point of interest\n    let latYPoI = value.latY;\n    let longXPoI = value.longX;\n    \n    // Coordinates of the IoT device\n    let latY = this.coordinates.latY;\n    let longX = this.coordinates.longX;\n    \n    let a = longXPoI - longX;\n    let b = latYPoI - latY;\n    \n    return Math.sqrt( a*a + b*b );\n}\n\n// It updates the minimumDistance and the minIndex variables\n// with the minimum distance found and the corresponding index\nfunction searchMinimum(value, index, array) {\n    \n    if (value < minimumDistance) {\n        minimumDistance = value;\n        minIndex = index\n    }\n}\n\n// It calculates the distances between the points of interest and\n// the IoT device / simulated point; it takes the minimum distance and\n// it adds the nearest point of interest to the list to return\nfunction findTheNearestPoint(coordinates, payload) {\n    \n    // For each points of interest return the distance with the IoT device\n    // or with the simulated point\n    const distances = msg.payload.pointsOfInterest.map(calculateDistances, {\n        coordinates: coordinates\n    });\n    \n    minIndex = 0;\n    minimumDistance = distances[0];\n    \n    // Take the minimum distance\n    distances.forEach(searchMinimum)\n    \n    // Save the nearest point\n    payload.nearestPoint = msg.payload.pointsOfInterest[minIndex].pointOfInterest;\n    \n    const obj = {\n        payload: payload\n    };\n    \n    output.push(obj);\n}\n\nlet noiseString;\n\nfunction convertToString(value, index){\n    if (noiseString==null){\n        noiseString = value.toString()\n    }\n    else{\n        noiseString = noiseString+\"-\"+value.toString();\n    }\n}\n\n// If a new IoT reading is received\nif (msg.payload.hasOwnProperty('iotReading')) {\n\n    msg.payload.iotReading.noiseValues.forEach(convertToString);\n    const payload = {\n        longX: msg.payload.iotReading.longX,\n        latY: msg.payload.iotReading.latY,\n        noiseValues: noiseString,\n        nearestPoint: msg.payload.pointsOfInterest[minIndex].pointOfInterest,\n        dateTime: msg.payload.iotReading.dateTime\n    };\n\n    // Coordinates of the IoT device\n    coordinates.longX = msg.payload.iotReading.longX;\n    coordinates.latY = msg.payload.iotReading.latY;\n\n    // Find the nearest point with the IoT device\n    findTheNearestPoint(coordinates, payload);\n}\n\n// If a simulation was done\nif (msg.payload.hasOwnProperty('simulatedReadings')) {\n    \n    let simNoises = msg.payload.simulatedReadings.simNoises\n    \n    // For each simulated reading\n    for (const simNoise of simNoises) {\n        \n        // Take the coordinates\n        coordinates.longX = simNoise.longX;\n        coordinates.latY = simNoise.latY;\n\n        const payload = {\n            longX: simNoise.longX,\n            latY: simNoise.latY,\n            noiseValues: simNoise.noiseValue,\n            nearestPoint: \"\",\n            dateTime: simNoise.dateTime\n        }\n        \n        // Find the nearest point with the simulated point\n        findTheNearestPoint(coordinates, payload);\n    }\n}\n\nreturn [output];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 60,
+        "wires": [
+            [
+                "28577e610f4ae978"
+            ]
+        ]
+    },
+    {
+        "id": "28577e610f4ae978",
+        "type": "csv",
+        "z": "fdf4d2abcdb7f5f4",
+        "name": "csv",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "longX,latY,noiseValues,nearestPoint,dateTime",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 550,
+        "y": 160,
+        "wires": [
+            [
+                "f27b6ae9c2873fc2"
+            ]
+        ]
+    },
+    {
+        "id": "f27b6ae9c2873fc2",
+        "type": "file",
+        "z": "fdf4d2abcdb7f5f4",
+        "name": "NearestPointPerIoT",
+        "filename": "/mnt/c/Programming_Stuff/Middleware_Technologies/GitHub/Middleware/Project1/Back-end/In-Out_files/Results.csv",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 710,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b887cb8a7fe1fcf9",
+        "type": "function",
+        "z": "56a46e01aa23bcc9",
+        "name": "Filter the first Test Message",
+        "func": "if (msg.payload != \"TEST MESSAGE 1\")\n    return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9f39d41ca6b8832c",
+        "type": "json",
+        "z": "56a46e01aa23bcc9",
+        "name": "Convert Payload into an Obj",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 260,
+        "y": 100,
+        "wires": [
+            [
+                "9771e202d0319486"
+            ]
+        ]
+    },
+    {
+        "id": "9771e202d0319486",
+        "type": "function",
+        "z": "56a46e01aa23bcc9",
+        "name": "Filter the feasible readings",
+        "func": "const UPPER_LONG_X = 18.51944;\nconst LOWER_LONG_X = 6.626111;\nconst UPPER_LAT_Y = 47.0925;\nconst LOWER_LAT_Y = 41.3;\nconst COOJA_BOUND = 200\n\nconst w = (UPPER_LONG_X - LOWER_LONG_X) / COOJA_BOUND;\nconst h = (UPPER_LAT_Y - LOWER_LAT_Y) / COOJA_BOUND;\n\nif (msg.payload.coordinates != \"\") {\n    \n    // The Cooja coordinates are transposed to the real IoT region\n    const payload = {\n        latY: (UPPER_LAT_Y - msg.payload.coordinates.split(\",\")[1] * h).toFixed(4),\n        longX: (LOWER_LONG_X + msg.payload.coordinates.split(\",\")[0] * w).toFixed(4),\n        noiseValues: msg.payload.noise_values.filter(value => value > 0),\n        dateTime: (new Date()).toISOString().slice(0, 19).replace(\"T\", \" \")\n    };\n    \n    const obj = {\n        topic: \"iotReading\",\n        payload: payload\n    };\n    \n    // Cooja coordinates are always feasible, just check for the feasible noise values\n    if (obj.payload.noiseValues.length > 0)\n        return obj;\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a2e5df490415eaa",
+        "type": "file in",
+        "z": "08b92f05826711db",
+        "name": "Read Simulated_noises",
+        "filename": "/mnt/c/Programming_Stuff/Middleware_Technologies/GitHub/Middleware/Project1/Simulation/result.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 210,
+        "y": 100,
+        "wires": [
+            [
+                "76e05329cb4e7851"
+            ]
+        ]
+    },
+    {
+        "id": "b3861fd20a4abe37",
+        "type": "function",
+        "z": "08b92f05826711db",
+        "name": "Filter the feasible simulated noise values",
+        "func": "const UPPER_LONG_X = 18.51944;\nconst LOWER_LONG_X = 6.626111;\nconst UPPER_LAT_Y = 41.3;\nconst LOWER_LAT_Y = 35.49;\n\nconst ROWS = 30;\nconst COLUMNS = 20;\n\nconst w = (UPPER_LONG_X - LOWER_LONG_X) / ROWS;\nconst h = (UPPER_LAT_Y - LOWER_LAT_Y) / COLUMNS;\n\nconst payload = {\n    simNoises: msg.payload.filter(value => value.noiseValue > 0)\n};\n\nconst obj = {\n    topic: \"simulatedReadings\",\n    payload: payload\n};\n\nfunction transposeCoordinates(item) {\n    item.latY = (UPPER_LAT_Y - item.latY * h).toFixed(4),\n    item.longX = (LOWER_LONG_X + item.longX * w).toFixed(4)\n}\n\n// The simulated coordinates are transposed to the real simulated region\nobj.payload.simNoises.forEach(transposeCoordinates);\n\nreturn obj;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "76e05329cb4e7851",
+        "type": "csv",
+        "z": "08b92f05826711db",
+        "name": "From CSV to Obj",
+        "sep": ",",
+        "hdrin": false,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "longX,latY,noiseValue,dateTime",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 410,
+        "y": 40,
+        "wires": [
+            [
+                "b3861fd20a4abe37"
+            ]
+        ]
+    },
+    {
+        "id": "9d79a23422809194",
+        "type": "mqtt in",
+        "z": "440798723b09e207",
+        "name": "MQTT-IN",
+        "topic": "iot/italy/noiseLevels/readings",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "e86c8435a8284898",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "6ec2cc893dbcbf3e"
+            ]
+        ]
+    },
+    {
+        "id": "6637bcb429784829",
+        "type": "mqtt out",
+        "z": "440798723b09e207",
+        "name": "Fake Reading",
+        "topic": "iot/italy/noiseLevels/readings",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "e86c8435a8284898",
+        "x": 340,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "47626dd1b24b248b",
+        "type": "inject",
+        "z": "440798723b09e207",
+        "name": "inject",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "payload"
+            },
+            {
+                "p": "qos",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "p": "retain",
+                "v": "false",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "iot/italy/noiseLevels/readings",
+        "payload": "{\"coordinates\":\"14.5646515657,17.68486468465\",\"noise_values\":[-14, -5, -6, 7, 9, -3]}",
+        "payloadType": "json",
+        "x": 150,
+        "y": 280,
+        "wires": [
+            [
+                "6637bcb429784829"
+            ]
+        ]
+    },
+    {
+        "id": "dea3dae5acd12d2f",
+        "type": "subflow:08b92f05826711db",
+        "z": "440798723b09e207",
+        "name": "",
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "ae648909eba97d27"
+            ]
+        ]
+    },
+    {
+        "id": "6ec2cc893dbcbf3e",
+        "type": "subflow:56a46e01aa23bcc9",
+        "z": "440798723b09e207",
+        "name": "",
+        "x": 360,
+        "y": 80,
+        "wires": [
+            [
+                "ae648909eba97d27"
+            ]
+        ]
+    },
+    {
+        "id": "16ea5ae2d82fea09",
+        "type": "watch-directory",
+        "z": "440798723b09e207",
+        "folder": "/mnt/c/Programming_Stuff/Middleware_Technologies/GitHub/Middleware/Project1/Simulation",
+        "recursive": 0,
+        "typeEvent": "create",
+        "ignoreInitial": true,
+        "ignoredFiles": "",
+        "ignoredFilesType": "re",
+        "name": "WatchSimNoisesDirectory",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "dea3dae5acd12d2f"
+            ]
+        ]
+    },
+    {
+        "id": "ae648909eba97d27",
+        "type": "subflow:fdf4d2abcdb7f5f4",
+        "z": "440798723b09e207",
+        "name": "",
+        "x": 700,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a6dc7a0a18b7f814",
+        "type": "inject",
+        "z": "440798723b09e207",
+        "name": "inject",
+        "props": [
+            {
+                "p": "file",
+                "v": "result.csv",
+                "vt": "str"
+            },
+            {
+                "p": "filedir",
+                "v": "/mnt/c/...",
+                "vt": "str"
+            },
+            {
+                "p": "filename",
+                "v": "/mnt/c/...",
+                "vt": "str"
+            },
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "/mnt/c/...",
+        "payloadType": "str",
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "dea3dae5acd12d2f"
+            ]
+        ]
+    }
+]

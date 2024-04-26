@@ -1,0 +1,30 @@
+ITALY:
+#define UPPER_LONG_X            18.51944
+#define LOWER_LONG_X            6.626111
+#define UPPER_LAT_Y              47.0925
+#define LOWER_LAT_Y               35.49
+
+IOT DEVICES:
+#define UPPER_LONG_X            18.51944
+#define LOWER_LONG_X            6.626111
+#define UPPER_LAT_Y              47.0925
+#define LOWER_LAT_Y               41.3
+
+#define UPPER_X_COOJA             200
+#define LOWER_X_COOJA              0
+#define UPPER_Y_COOJA              0
+#define LOWER_Y_COOJA             200
+
+SIMULATION:
+#define UPPER_LONG_X            18.51944
+#define LOWER_LONG_X            6.626111
+#define UPPER_LAT_Y               41.3
+#define LOWER_LAT_Y               35.49
+
+VISUALIZATION:
+47,6                47,18
+
+
+41.3,6             41.3,18
+
+35,6                35,18
